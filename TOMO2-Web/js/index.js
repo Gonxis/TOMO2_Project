@@ -63,16 +63,4 @@ window.onload = function() {
 
 });
 
-$(document).ready(function () {
-    $('.nav-wrapper ul li').click(function(e) {
-
-        $('.nav-wrapper ul li').removeClass('active');
-
-        var $this = $(this);
-        if (!$this.hasClass('active')) {
-            $this.addClass('active');
-        }
-        //e.preventDefault();
-    });
-});
   }(jQuery));

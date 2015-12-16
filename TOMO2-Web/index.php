@@ -19,9 +19,10 @@ $conn = mysqli_connect("localhost", "root", "root", "TOMO2");
         <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo"><i
                     class="material-icons left"><img src="img/Logo_Tomo2_.png" height="55px" width="55px"></i>TOMO 2</a>
             <ul class="right hide-on-med-and-down">
-                <li class="active"><a href="#ourShops">Tiendas</a></li>
+                <li><a href="#ourShops">Tiendas</a></li>
                 <li><a href="#bookings">Alquileres</a></li>
                 <li><a href="#productos">Productos</a></li>
+                <?php if (isset($_SESSION['name'])) { ?> <li><a href="#editProfile">Mi perfil</a></li> <?php }  ?>
                 <li><a href="#contactUs">Contacto</a></li>
                 <!--<li><a href="#">Horarios</a></li>-->
                 <li><a href="#news">Noticias</a></li>
@@ -32,8 +33,8 @@ $conn = mysqli_connect("localhost", "root", "root", "TOMO2");
                 <li class="active"><a href="#" class="white-text"> <i class="material-icons">home</i> Inicio</a></li>
                 <li><a href="#ourShops" class="white-text"> <i class="material-icons">place</i> Tiendas</a></li>
                 <li><a href="#bookings" class="white-text"> <i class="material-icons">event</i> Alquileres</a></li>
-                <li><a href="#productos" class="white-text"> <i class="material-icons">shopping_basket</i>Productos</a>
-                </li>
+                <li><a href="#productos" class="white-text"> <i class="material-icons">shopping_basket</i>Productos</a></li>
+                <?php if (isset($_SESSION['name'])) { ?> <li><a href="#editProfile" class="white-text"> <i class="material-icons">dashboard</i> Mi perfil</a></li> <?php }  ?>
                 <li><a href="#contactUs" class="white-text"> <i class="material-icons">send</i> Contacto</a></li>
                 <!--<li><a href="#">Horarios</a></li>-->
                 <li><a href="#news" class="white-text"> <i class="material-icons">library_books</i>Noticias</a></li>
@@ -668,7 +669,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <div class="row">
     <div class="input-field col s4">
-        <select multiple>
+        <select id="select" name="select" multiple>
             <optgroup label="Helados">
                 <!--<option value="" disabled selected>Choose a category</option> -->
                 <option value="1" selected>Crema</option>
@@ -705,11 +706,16 @@ while ($row = mysqli_fetch_assoc($result)) {
 $sql = "SELECT * FROM Productos";
 $result = mysqli_query($conn, $sql);
 $numRows = mysqli_num_rows($result);
+$max = mysqli_query($conn, "SELECT max('id_product') AS mx FROM Productos");
+//$last_id = $conn->lastInsertId();
+//echo "New record created successfully. Last inserted ID is: " . $last_id;
 
 if (mysqli_num_rows($result) > 0) {
     // output data of each row
     while ($row = mysqli_fetch_assoc($result)) {
         //if no es el último registro hacer esto // if ($row != $numRows)
+        $maxid = $row['mx'];// gives the highest id
+        for ($i = 0; $i < $maxid; $i++){ if ($i != $maxid){ echo "NOT last row"; } else echo $i;  }
         if ($row["id_product"] % 2 == 0) {
             ?>
             <div class="row">
@@ -884,8 +890,8 @@ if (mysqli_num_rows($result) > 0) {
         <div class="section no-pad-bot">
             <div class="container">
                 <div class="row center">
-                    <h5 class="header col s12 red-text light">Pefil de <?php if (isset($_SESSION['name'])) {
-                            echo $_SESSION['name'];
+                    <h5 class="header col s12 red-text light"> <?php if (isset($_SESSION['name'])) {
+                            echo "Perfil de " . $_SESSION['name'];
                         } ?></h5>
                 </div>
             </div>
@@ -900,12 +906,12 @@ if (mysqli_num_rows($result) > 0) {
             <div class="row">
                 <div class="col s12 center">
                     <h3><i class=" mdi-action-dashboard brown-text"></i></h3>
-                    <h4>Pefil de <?php if (isset($_SESSION['name'])) {
+                    <h4><?php if (isset($_SESSION['name'])) {
 
                             if ($_SESSION['id'] == '10207674962976867') {
                                 echo "ADMIN";
                             } else {
-                                echo $_SESSION["name"];
+                                echo "Perfil de " . $_SESSION["name"];
                             }
                         } else {
                             echo "#UsuarioNoRegistrado";
@@ -1007,10 +1013,38 @@ if (mysqli_num_rows($result) > 0) {
 
         <div class="row">
             <div class="col s12 m12 l12 center">
-                <h3><i class=" mdi-action-dashboard brown-text"></i></h3>
+                <h3><i class=" mdi-av-my-library-books brown-text"></i></h3>
                 <h4>Noticias de TOMO 2</h4>
                 <h5 class="red-text light">Esta parte de la web aún está en construcción</h5>
                 <br>
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <select multiple>
+                            <optgroup label="Fecha">
+                                <!--<option value="" disabled selected>Choose a category</option> -->
+                                <option value="1" selected>Más reciente</option>
+                                <option value="2">Más antigua</option>
+                            </optgroup>
+                            <optgroup label="Nombre">
+                                <option value="3">A-Z</option>
+                                <option value="4">Z-A</option>
+                            </optgroup>
+                        </select>
+                        <label>Buscador</label>
+                    </div>
+
+                    <div class="col s8">
+                        <form>
+                            <div class="input-field">
+                                <input id="search" type="search" placeholder="Busca por noticias..." required>
+                                <label for="search"><i class="material-icons">search</i></label>
+                                <!--<i class="material-icons red-text">close</i>-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
 
                 <?php
                 //$sql = "SELECT * FROM Noticias WHERE id_noticia = '2'";
@@ -1021,7 +1055,7 @@ if (mysqli_num_rows($result) > 0) {
                 if (mysqli_num_rows($result) > 0) {
                     // output data of each row
                     while ($row = mysqli_fetch_assoc($result)) {
-                        //if no es el último registro hacer esto // if ($row != $numRows)
+                        //if no es el último registro hacer esto // if ($row != $numRows) //
                         if ($row["id_news"] % 2 == 0) {
                             ?>
                             <div class="row">
@@ -1200,5 +1234,30 @@ if (mysqli_num_rows($result) > 0) {
 <script src="js/index.js"></script>
 <script src="js/init.js"></script>
 <script type="text/javascript" src="../Card-2/fbapp/fb.js"></script>
+
+<!--Script para inicializar los menús desplegables, pero parece que no funciona-->
+<!--<script type="text/javascript">
+    $(document).ready(function() {
+        $('#select').material_select();
+    });
+    //$('#select').load('index.php', function() { $('#select').material_select(); });
+    </script> -->
+
+<!--Script para inicializar en la barra de navegación la sección activa o no-->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.nav-wrapper ul li').click(function(e) {
+
+            $('.nav-wrapper ul li').removeClass('active');
+
+            var $this = $(this);
+            if (!$this.hasClass('active')) {
+                $this.addClass('active');
+            }
+            //e.preventDefault();
+        });
+    });
+</script>
+
 </body>
 </html>
