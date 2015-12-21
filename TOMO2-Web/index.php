@@ -669,6 +669,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <div class="row">
     <div class="input-field col s4">
+        <div class="select-wrapper">
+            <span class="caret">▼</span>
+        <input type="text" class="select-dropdown" readonly="true" data-activates="select-options-6f707eb3-c90a-4006-1705-889f266c11cc" value="Crema">
+        <ul id="select-options-6f707eb3-c90a-4006-1705-889f266c11cc" class="dropdown-content select-dropdown"><li class="optgroup"><span>Helados</span></li><li class=""><span>Crema</span></li><li class="active selected"><span>Sorbete</span></li><li class="optgroup"><span>Repostería</span></li><li class=""><span>Galleta</span></li><li class=""><span>Tartas</span></li></ul>
         <select id="select" name="select" multiple>
             <optgroup label="Helados">
                 <!--<option value="" disabled selected>Choose a category</option> -->
@@ -686,6 +690,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <option value="6">Bebidas</option>
             </optgroup>
         </select>
+        </div>
         <label>Categoría</label>
     </div>
 
@@ -705,18 +710,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 //$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
 $sql = "SELECT * FROM Productos";
 $result = mysqli_query($conn, $sql);
-$numRows = mysqli_num_rows($result);
-$max = mysqli_query($conn, "SELECT max('id_product') AS mx FROM Productos");
-//$last_id = $conn->lastInsertId();
-//echo "New record created successfully. Last inserted ID is: " . $last_id;
 
 if (mysqli_num_rows($result) > 0) {
     // output data of each row
     while ($row = mysqli_fetch_assoc($result)) {
-        //if no es el último registro hacer esto // if ($row != $numRows)
-        $maxid = $row['mx'];// gives the highest id
-        for ($i = 0; $i < $maxid; $i++){ if ($i != $maxid){ echo "NOT last row"; } else echo $i;  }
-        if ($row["id_product"] % 2 == 0) {
+
             ?>
             <div class="row">
             <div class="col s6 m6 l6">
@@ -730,7 +728,7 @@ if (mysqli_num_rows($result) > 0) {
                 </div>
             </div>
         <?php
-        } else {
+         if($row = mysqli_fetch_assoc($result)){
             ?>
 
             <div class="col s6 m6 l6">
@@ -745,8 +743,11 @@ if (mysqli_num_rows($result) > 0) {
             </div>
             </div>
         <?php
-        }
-        //else (es el último regstro) { <div class="row"> <div class="col s6"> <div class="card"> ... </div> </div> </div> }
+        } else {
+             ?>
+            </div>
+            <?php
+         }
         //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
     }
 } else {
@@ -1055,8 +1056,6 @@ if (mysqli_num_rows($result) > 0) {
                 if (mysqli_num_rows($result) > 0) {
                     // output data of each row
                     while ($row = mysqli_fetch_assoc($result)) {
-                        //if no es el último registro hacer esto // if ($row != $numRows) //
-                        if ($row["id_news"] % 2 == 0) {
                             ?>
                             <div class="row">
 
@@ -1075,7 +1074,7 @@ if (mysqli_num_rows($result) > 0) {
                             </div>
 
                         <?php
-                        } else {
+                         if ($row = mysqli_fetch_assoc($result)) {
                             ?>
 
                             <div class="col s4 l4 center">
@@ -1094,7 +1093,10 @@ if (mysqli_num_rows($result) > 0) {
                             </div>
 
                         <?php
-                        }
+                        } else { ?>
+                              </div>
+                        <?php }
+
                         //else (es el último registro) { <div class="row"> <div class="col s6"> <div class="card"> ... </div> </div> </div> }
                         //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
                     }
@@ -1231,6 +1233,7 @@ if (mysqli_num_rows($result) > 0) {
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/scrollFire.js"></script>
+<!--<script src="js/search.js"></script>-->
 <script src="js/index.js"></script>
 <script src="js/init.js"></script>
 <script type="text/javascript" src="../Card-2/fbapp/fb.js"></script>
