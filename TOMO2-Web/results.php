@@ -13,7 +13,7 @@ $conn = mysqli_connect("localhost", "root", "root", "TOMO2");
 $uid = $_SESSION['id'];
 
 //create the url
-$profile_pic = "http://graph.facebook.com/" . $uid . "/picture?width=35&height=35";
+$profile_pic =  "http://graph.facebook.com/".$uid."/picture?width=35&height=35";
 ?>
 
 <!DOCTYPE html>
@@ -90,15 +90,12 @@ $profile_pic = "http://graph.facebook.com/" . $uid . "/picture?width=35&height=3
                 <li><a href="#bookings">Alquileres</a></li>
                 <li><a href="#productos">Productos</a></li>
                 <?php if (isset($_SESSION['name'])) { ?>
-                    <li><a href="#editProfile"> <i
-                                class="left circle"> <?php echo "<img src=\"" . $profile_pic . "\" />"; ?> </i> <?php echo ""/*$_SESSION['name']*/
-                            ; ?></a></li> <?php } ?>
+                    <li><a href="#editProfile"> <i class="left circle"> <?php echo "<img src=\"" . $profile_pic . "\" />"; ?> </i> <?php echo ""/*$_SESSION['name']*/; ?></a></li> <?php } ?>
                 <li><a href="#contactUs">Contacto</a></li>
                 <!--<li><a href="#">Horarios</a></li>-->
                 <li><a href="#news">Noticias</a></li>
                 <?php if (isset($_SESSION['name'])) { /*var_dump ($_SESSION['datos']);*/
-                } else {
-                    ?>
+                } else { ?>
                     <div class="fb-login-button" data-scope="public_profile,email"
                          onlogin="checkLoginState();"></div><?php } ?>
 
@@ -110,17 +107,14 @@ $profile_pic = "http://graph.facebook.com/" . $uid . "/picture?width=35&height=3
                 <li><a href="#productos" class="white-text"> <i class="material-icons">shopping_basket</i>Productos</a>
                 </li>
                 <?php if (isset($_SESSION['name'])) { ?>
-                    <li><a href="#editProfile" class="white-text"> <i
-                                class="circle"><?php echo "<img src=\"" . $profile_pic . "\" />"; ?></i> <?php echo $_SESSION['name']; ?>
-                        </a>
+                    <li><a href="#editProfile" class="white-text"> <i class="circle"><?php echo "<img src=\"" . $profile_pic . "\" />"; ?></i> <?php echo $_SESSION['name']; ?></a>
                     </li> <?php } ?>
                 <li><a href="#contactUs" class="white-text"> <i class="material-icons">send</i> Contacto</a></li>
                 <!--<li><a href="#">Horarios</a></li>-->
                 <li><a href="#news" class="white-text"> <i class="material-icons">library_books</i>Noticias</a></li>
                 <!--<li><a href="#editProfile" class="white-text"> <i class="material-icons">edit</i> Edit your profile</a></li>-->
                 <?php if (isset($_SESSION['name'])) { /*var_dump ($_SESSION['datos']);*/
-                } else {
-                    ?>
+                } else { ?>
                     <div class="fb-login-button" data-scope="public_profile,email"
                          onlogin="checkLoginState();"></div><?php } ?>
             </ul>
@@ -639,8 +633,8 @@ while ($row = mysqli_fetch_assoc($result)) {
     <div class="parallax">
         <img src="img/Alquiler1.jpg" alt="Localización de la tienda de la calle Vic, Gracia">
         <!--<video id="video" autoplay preload="auto" loop width="100%">
-            <source src="videos/TOMO2_5.mp4" type="video/mp4"/>
-        </video>-->
+            <source src="videos/TOMO2_5.mp4" type="video/mp4"/>-->
+        </video>
     </div>
 </div>
 <div class="container">
@@ -772,161 +766,77 @@ while ($row = mysqli_fetch_assoc($result)) {
 <div class="container"> <!--Aqui tendría que ir una imagen con fondo otoñal-->
 <div class="section">
 <div class="row">
-    <div class="col s12 center">
-        <h3><i class=" mdi-action-store brown-text"></i></h3>
-        <h4>Nuestros productos</h4>
-        <h5 class="red-text light">Sabores de helados</h5>
+<div class="col s12 center">
+    <h3><i class=" mdi-action-store brown-text"></i></h3>
+    <h4>Nuestros productos</h4>
+    <h5 class="red-text light">Sabores de helados</h5>
 
-        <div class="row">
-
-            <!--<div class="input-field col s4">
-                <div class="select-wrapper">
-                    <ul>
-                        <li class="optgroup">
-                            <span>Helados</span>
-                        </li>
-                        <li class>
-                            <span>Crema</span>
-                        </li>
-                        <li class>
-                            <span>Sorbete</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Repostería</span>
-                        </li>
-                        <li class>
-                            <span>Galleta</span>
-                        </li>
-                        <li class>
-                            <span>Tartas</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Otros</span>
-                        </li>
-                        <li class>
-                            <span>Otros</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Bebidas</span>
-                        </li>
-                        <li class>
-                            <span>Bebidas</span>
-                        </li>
-                    </ul>
-                    <select>
-                        <optgroup label="Helados">
-                            <option value="1" selected>Crema</option>
-                            <option value="2">Sorbete</option>
-                        </optgroup>
-                        <optgroup label="Repostería">
-                            <option value="3">Galleta</option>
-                            <option value="4">Tartas</option>
-                        </optgroup>
-                        <optgroup label="Otros">
-                            <option value="5">Otros</option>
-                        </optgroup>
-                        <optgroup label="Bebidas">
-                            <option value="6">Bebidas</option>
-                        </optgroup>
-                    </select>-->
-                    <!--<select>
-                        <!--<optgroup label="Helados">-->
-                    <!--<option value="" disabled selected>Choose a category</option> -->
-                    <!--<option value="1" selected>Crema</option>
-                    <option value="2">Sorbete</option>
-                    <!--</optgroup>
-                    <optgroup label="Repostería">-->
-                    <!--<option value="3">Galleta</option>
-                    <option value="4">Tartas</option>
-                    <!--</optgroup>
-                    <optgroup label="Otros">-->
-                    <!--<option value="5">Otros</option>
-                    <!--</optgroup>
-                    <optgroup label="Bebidas">-->
-                    <!--<option value="6">Bebidas</option>
-                    <!--</optgroup>-->
-                    <!--</select>-->
-                </div>
+    <div class="row">
+        <div class="input-field col s4">
+            <div class="select-wrapper">
+                <span class="caret">▼</span>
+                <input type="text" class="select-dropdown" readonly="true"
+                       data-activates="select-options-6f707eb3-c90a-4006-1705-889f266c11cc" value="Crema">
+                <ul id="select-options-6f707eb3-c90a-4006-1705-889f266c11cc" class="dropdown-content select-dropdown">
+                    <li class="optgroup"><span>Helados</span></li>
+                    <li class=""><span>Crema</span></li>
+                    <li class="active selected"><span>Sorbete</span></li>
+                    <li class="optgroup"><span>Repostería</span></li>
+                    <li class=""><span>Galleta</span></li>
+                    <li class=""><span>Tartas</span></li>
+                </ul>
+                <select id="select" name="select" multiple>
+                    <optgroup label="Helados">
+                        <!--<option value="" disabled selected>Choose a category</option> -->
+                        <option value="1" selected>Crema</option>
+                        <option value="2">Sorbete</option>
+                    </optgroup>
+                    <optgroup label="Repostería">
+                        <option value="3">Galleta</option>
+                        <option value="4">Tartas</option>
+                    </optgroup>
+                    <optgroup label="Otros">
+                        <option value="5">Otros</option>
+                    </optgroup>
+                    <optgroup label="Bebidas">
+                        <option value="6">Bebidas</option>
+                    </optgroup>
+                </select>
             </div>
-
-            <div class="col s8">
-                <form method="get" action="#productos" enctype="multipart/form-data">
-                    <div class="input-field">
-                        <input id="search" name="search_product" type="search" placeholder="Busca por productos...">
-                        <label for="search"><i class="material-icons">search</i></label>
-                        <!--<i class="material-icons red-text">close</i>-->
-                    </div>
-                </form>
-            </div>
+            <label>Categoría</label>
         </div>
 
-        <!--<FORM METHOD=GET ACTION="results.php">
-            Buscar: <INPUT TYPE="text" NAME="busqueda">
-        </FORM> -->
+        <div class="col s8">
+            <form method="get" action="results.php" enctype="multipart/form-data">
+                <div class="input-field">
+                    <input id="search_product" name="search_product" type="search" placeholder="Busca por productos..." required>
+                    <label for="search"><i class="material-icons">search</i></label>
+                    <!--<i class="material-icons red-text">close</i>-->
+                </div>
+            </form>
+        </div>
+    </div>
 
-        <?php
+    <!--<FORM METHOD=GET ACTION="results.php">
+        Buscar: <INPUT TYPE="text" NAME="busqueda">
+    </FORM> -->
 
-        //$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
-        $sql = "SELECT * FROM Productos";
-        $result = mysqli_query($conn, $sql);
+    <?php
 
-        if (mysqli_num_rows($result) > 0) {
+    //$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
+    //$sql = "SELECT * FROM Productos";
+    //$result = mysqli_query($conn, $sql);
 
-        ////Prueba Search_product
-        if (isset($_GET['search_product'])){
+    if (isset($_GET['search'])){
         $get_query = $_GET ['search_product'];
-        $get_post = "SELECT * FROM Productos WHERE subcategory LIKE '%$get_query%' OR name LIKE '%$get_query%' OR description LIKE '%$get_query%' OR category LIKE '%$get_query%'";
+        $get_post = "SELECT * FROM Productos WHERE subcategory LIKE '%$get_query%'";
 
         $run_posts = mysqli_query($conn, $get_post);
 
 
-        if (mysqli_num_rows($run_posts) > 0) {
-        // output data of each row
-        while ($row = mysqli_fetch_assoc($run_posts)) {
-
-        ?>
-        <div class="row">
-            <div class="col s6 m6 l6">
-                <div class="card">
-                    <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="442px"
-                                                 alt="<?php echo $row["image"]; ?>"><span
-                            class="card-title"><?php echo $row["name"]; ?></span></div>
-                    <div class="card-content">
-                        <p><?php echo $row["description"]; ?></p>
-                    </div>
-                </div>
-            </div>
-            <?php
-            if ($row = mysqli_fetch_assoc($run_posts)){
-            ?>
-
-            <div class="col s6 m6 l6">
-                <div class="card">
-                    <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="442px"
-                                                 alt="<?php echo $row["image"]; ?>"><span
-                            class="card-title"><?php echo $row["name"]; ?></span></div>
-                    <div class="card-content">
-                        <p><?php echo $row["description"]; ?></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php
-        } else {
-        ?>
-    </div>
-    <?php
-    }
-    //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
-    }
-    } else {
-        echo "No se han encontrado coincidencias con la búsqueda, pruebe otra vez..";
-    }
-    } else {
-    //End if Search_Product... falta else
-
+    if (mysqli_num_rows($run_posts) > 0) {
     // output data of each row
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($run_posts)) {
 
     ?>
     <div class="row">
@@ -941,7 +851,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
         <?php
-        if ($row = mysqli_fetch_assoc($result)){
+        if ($row = mysqli_fetch_assoc($run_posts)){
         ?>
 
         <div class="col s6 m6 l6">
@@ -963,9 +873,9 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
 }
-}
 } else {
     echo "Han habido problemas al obtener los Productos de la base de datos";
+}
 }
 
 ?>
@@ -1252,9 +1162,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </div>
 
                     <div class="col s8">
-                        <form method="get" action="#news" enctype="multipart/form-data">
+                        <form>
                             <div class="input-field">
-                                <input id="search_new" name="search_new" type="search" placeholder="Busca por noticias...">
+                                <input id="search" type="search" placeholder="Busca por noticias..." required>
                                 <label for="search"><i class="material-icons">search</i></label>
                                 <!--<i class="material-icons red-text">close</i>-->
                             </div>
@@ -1267,60 +1177,34 @@ while ($row = mysqli_fetch_assoc($result)) {
                 //$sql = "SELECT * FROM Noticias WHERE id_noticia = '2'";
                 $sql = "SELECT * FROM Noticias";
                 $result = mysqli_query($conn, $sql);
-                //$numRows = mysqli_num_rows($result);
+                $numRows = mysqli_num_rows($result);
 
                 if (mysqli_num_rows($result) > 0) {
-
-                    if (isset($_GET['search_new'])) {
-                        $get_query = $_GET ['search_new'];
-                        $get_post = "SELECT * FROM Noticias WHERE name LIKE '%$get_query%' OR upload_date LIKE '%$get_query%' OR description LIKE '%$get_query%'";
-
-                        $run_posts = mysqli_query($conn, $get_post);
-
-                        if (mysqli_num_rows($run_posts) > 0) {
-                            // output data of each row
-                            while ($row = mysqli_fetch_assoc($run_posts)) {
-                                ?>
-                                <div class="row">
-                                    <h5><?php echo $row["name"]; ?></h5>
-                                    <span><?php echo $row["upload_date"]; ?></span>
-                                    <img style="float: left" src="<?php echo $row["image"]; ?>"
-                                         alt="<?php echo $row["image"]; ?>" width="100" height="100"/>
-
-                                    <div>
-                                        <p><?php echo $row["description"]; ?></p>
-                                    </div>
-                                    <br/>
-
+                    // output data of each row
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        ?>
+                        <div class="row">
+                            <div class="center">
+                                <div><img style="float: left" src="<?php echo $row["image"]; ?>"
+                                          alt="<?php echo $row["image"]; ?>" <span
+                                        class="title"><?php echo $row["name"]; ?></span>
+                                    <span style="float: right"><?php echo $row["upload_date"]; ?></span>
                                 </div>
-
-                            <?php
-                            }
-                        } else {
-                            echo "No se han encontrado coincidencias de noticias buscadas.. Pruebe otra vez";
-                        }
-                        //else (es el último registro) { <div class="row"> <div class="col s6"> <div class="card"> ... </div> </div> </div> }
-                        //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
-                    } else {
-
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            ?>
-                            <div class="row">
-                                <h5><?php echo $row["name"]; ?></h5>
-                                <img style="float: left" src="<?php echo $row["image"]; ?>"
-                                     alt="<?php echo $row["image"]; ?>" width="100" height="100"/>
-                                <span style="float: left;"><?php echo $row["upload_date"]; ?></span>
-
                                 <div>
                                     <p><?php echo $row["description"]; ?></p>
                                 </div>
-                                <br/>
+                                <div class=""><a href="<?php echo $row["link"]; ?>" target="_blank">Link
+                                        al documento</a></div>
 
                             </div>
+                        </div>
 
-                        <?php
-                        }
+                    <?php
                     }
+
+                    //else (es el último registro) { <div class="row"> <div class="col s6"> <div class="card"> ... </div> </div> </div> }
+                    //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
+
                 } else {
                     echo "Problemas al obtener las Noticias de la bbdd";
                 }
@@ -1450,8 +1334,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <!--Footer-->
 
 <!--  Scripts -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/scrollFire.js"></script>
@@ -1509,12 +1392,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         else
             return true
     }
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('select').material_select();
-    });
 </script>
 
 </body>

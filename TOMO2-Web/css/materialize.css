@@ -5352,7 +5352,7 @@ nav {
   .navbar-fixed nav {
     position: fixed; }
 
-@media only screen and (min-width : 777px) { //601
+@media only screen and (min-width : 777px) {  /*601*/
   nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
     height: 64px;
     line-height: 64px; }
@@ -7065,13 +7065,15 @@ select {
   display: inline-block;
   position: relative;
   width: 48px;
-  height: 48px; }
+  height: 48px;
+}
   .preloader-wrapper.small {
     width: 36px;
     height: 36px; }
   .preloader-wrapper.big {
     width: 64px;
-    height: 64px; }
+    height: 64px;
+  }
   .preloader-wrapper.active {
     /* duration: 360 * ARCTIME / (ARCSTARTROT + (360-ARCSIZE)) */
     -webkit-animation: container-rotate 1568ms linear infinite;
