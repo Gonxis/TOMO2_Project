@@ -1,287 +1,144 @@
 <?php
 
-class ShopModel{
-    private $pdo;
+session_start();
 
-    public function __CONSTRUCT(){
+include_once ('../includes/connection.php');
+include_once ('../includes/product.php');
+include_once ('../includes/productModel.php');
 
-        try{
+    $prdt = new Product();
+    $productModel = new ProductModel();
 
-            $this->pdo = new PDO('mysql:host=localhost;dbname=TOMO2', 'root', 'root');
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if (isset($_REQUEST['action'])) {
 
-        } catch (Exception $e){
+        echo '<script language="javascript">alert("Hemos entrado en el 1er if! Encima, el nombre es: '. $_REQUEST['name'] .'");
+        </script>';
 
-            die ($e->getMessage());
+        switch ($_REQUEST['action']) {
 
-        }
-    }
+            case 'update':
 
-    public function ListAll(){
+                $prdt->__SET('id_product'   , $_REQUEST['id_product']);
+                $prdt->__SET('name'         , $_REQUEST['name']);
+                $prdt->__SET('description'  , $_REQUEST['description']);
+                $prdt->__SET('category'     , $_REQUEST['category']);
+                $prdt->__SET('subcategory'  , $_REQUEST['subcategory']);
+                $prdt->__SET('image'        , $_REQUEST['image']);
+                $prdt->__SET('active'       , $_REQUEST['active']);
 
-        try {
+                $productModel->Update($prdt);
 
-            $result = array();
+                echo '<script language="javascript">alert("¡El registro se ha actualizado exitosamente!");</script>';
 
-            $query = $this->pdo->prepare('SELECT * FROM Productos');
-            $query->execute();
+                header('Location: ../admin/index.php');
+                break;
 
-            foreach ($query->fetchAll(PDO::FETCH_OBJ) as $r){
+            case 'insert':
 
-                $prdt = new News();
+                $prdt->__SET('id_product'   , $_REQUEST['id_product']);
+                $prdt->__SET('name'         , $_REQUEST['name']);
+                $prdt->__SET('description'  , $_REQUEST['description']);
+                $prdt->__SET('category'     , $_REQUEST['category']);
+                $prdt->__SET('subcategory'  , $_REQUEST['subcategory']);
+                $prdt->__SET('image'        , $_REQUEST['image']);
+                $prdt->__SET('active'       , $_REQUEST['active']);
 
-                $prdt->__SET('id_product', $r->id_product);
-                $prdt->__SET('name', $r->name);
-                $prdt->__SET('description', $r->description);
-                $prdt->__SET('category', $r->category);
-                $prdt->__SET('subcategory', $r->subcategory);
-                $prdt->__SET('image', $r->image);
-                $prdt->__SET('active', $r->active);
+                $productModel->Insert($prdt);
 
-                $result[] = $prdt;
+                echo '<script language="javascript">alert("¡Se ha insertado el registro con éxito!");</script>';
 
-            }
+                header('Location: ../admin/index.php');
+                break;
 
-            return $result;
+            case 'delete':
 
-        } catch (Exception $e){
+                $productModel->Delete($_REQUEST['id_product']);
 
-            die ($e->getMessage());
+                echo '<script language="javascript">alert("Se ha borrado el registro con éxito!");</script>';
 
-        }
-    }
+                header('Location: ../admin/index.php');
+                break;
 
-    public function Obtain($id_product){
+            case 'edit':
 
-        try {
+                $prdt = $productModel->Obtain($_REQUEST['id_product']);
+                break;
 
-            $query = $this->pdo->prepare('SELECT * FROM Productos WHERE id_product = ?');
+            default:
 
-            $query->execute(array($id_product));
-            $r = $query->fetch(PDO::FETCH_OBJ);
-
-            $prdt = new News();
-
-            $prdt->__SET('id_product', $r->id_product);
-            $prdt->__SET('name', $r->name);
-            $prdt->__SET('description', $r->description);
-            $prdt->__SET('category', $r->category);
-            $prdt->__SET('subcategory', $r->subcategory);
-            $prdt->__SET('image', $r->image);
-            $prdt->__SET('active', $r->active);
-
-            return $prdt;
-
-        } catch (Exception $e){
-
-            die ($e->getMessage());
-
-        }
-
-    }
-
-    public function Delete($id_product){
-
-        try {
-
-            $query = $this->pdo->prepare('DELETE FROM Productos WHERE id_product = ?');
-
-            $query->execute(array($id_product));
-
-        } catch (Exception $e) {
-
-            die ($e->getMessage());
+                echo "Error with the request action";
+                break;
 
         }
     }
 
-    public function Update(News $data){
+    ?>
+    <button style="float: right"><a href="../admin/index.php">Back</a></button>
+    <form action="?action=<?php echo $prdt->id_product > 0 ? 'update' : 'insert'; ?>" method="post">
+        <input type="hidden" name="id_product" value="<?php echo $prdt->__GET('id_product'); ?>"/>
+        <table style="width: 500px; background: #eee; padding: 4px;">
+            <tr>
+                <th style="text-align: left;">Name</th>
+                <td><input type="text" name="name" value="<?php echo $prdt->__GET('name'); ?>" style="width: 100%;"/>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Description</th>
+                <td><input type="text" name="description" value="<?php echo $prdt->__GET('description'); ?>"
+                           style="width: 100%;"/></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Category</th>
+                <td><input type="text" name="category" value="<?php echo $prdt->__GET('category'); ?>"
+                           style="width: 100%;"/></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Subcategory</th>
+                <td><input type="text" name="subcategory" value="<?php echo $prdt->__GET('subcategory'); ?>"
+                           style="width: 100%;"/></td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Image</th>
+                <td><input type="text" name="image" value="<?php echo $prdt->__GET('image'); ?>" style="width: 100%;"/>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left;">Active</th>
+                <td><input type="text" name="active" value="<?php echo $prdt->__GET('active'); ?>"
+                           style="width: 100%;"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit">Save</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
 
-        try {
-
-            $query = "UPDATE Productos SET
-                            name        = ?,
-                            description = ?,
-                            category    = ?,
-                            image       = ?,
-                            active      = ?
-                      WHERE id_product  = ?";
-
-            $this->pdo->prepare($query)->execute(
-                                            array(
-                                                $data->__GET('name'),
-                                                $data->__GET('description'),
-                                                $data->__GET('category'),
-                                                $data->__GET('subcategory'),
-                                                $data->__GET('image'),
-                                                $data->__GET('active'),
-                                                $data->__GET('id_product')
-                                            )
-                                        );
-
-        } catch (Exception $e) {
-
-            die ($e->getMessage());
-
-        }
-    }
-
-    public function Insert(News $data){
-
-        try {
-
-            $query = "INSERT INTO Productos (name, description, category, subcategory, image, active)
-                      VALUES (?, ?, ?, ?, ?, ?)";
-
-            $this->pdo->prepare($query)->execute(
-                                            array(
-                                                $data->__GET('name'),
-                                                $data->__GET('description'),
-                                                $data->__GET('category'),
-                                                $data->__GET('subcategory'),
-                                                $data->__GET('image'),
-                                                $data->__GET('active')
-                                            )
-                                         );
-
-        } catch (Exception $e) {
-
-            die ($e->getMessage());
-
-        }
-
-    }
-
-}
-
-class Product {
-
-    private $id_product;
-    private $name;
-    private $description;
-    private $category;
-    private $subcategory;
-    private $image;
-    private $active;
-
-    public function __GET($k){ return $this->$k; }
-    public function __SET($k, $v){ return $this->$k = $v; }
-
-}
-
-$prdt = new News();
-$productModel = new NewModel();
-
-if (isset($_REQUEST['action'])){
-
-    switch ($_REQUEST['action']){
-
-        case 'update':
-
-            $prdt->__SET('id_product',    $_REQUEST['id_product']);
-            $prdt->__SET('name',          $_REQUEST['name']);
-            $prdt->__SET('description',   $_REQUEST['description']);
-            $prdt->__SET('category',      $_REQUEST['category']);
-            $prdt->__SET('subcategory',   $_REQUEST['subcategory']);
-            $prdt->__SET('image',         $_REQUEST['image']);
-            $prdt->__SET('active',        $_REQUEST['active']);
-
-            $productModel->Update ($prdt);
-            header ('Location:index.php');
-            break;
-
-        case 'insert':
-
-            $prdt->__SET('name',          $_REQUEST['name']);
-            $prdt->__SET('description',   $_REQUEST['description']);
-            $prdt->__SET('category',      $_REQUEST['category']);
-            $prdt->__SET('subcategory',   $_REQUEST['subcategory']);
-            $prdt->__SET('image',         $_REQUEST['image']);
-            $prdt->__SET('active',        $_REQUEST['active']);
-
-            $productModel->Insert ($prdt);
-            header ('Location:index.php');
-            break;
-
-        case 'delete':
-
-            $productModel->Delete ($_REQUEST['id_product']);
-            header ('Location: index.php');
-            break;
-
-        case 'edit':
-
-            $prdt = $productModel->Obtain($_REQUEST['id_product']);
-            break;
-
-        default:
-
-            echo "Error with the request action";
-            break;
-
-    }
-}
-
-?>
-
-<form action="?action=<?php echo $prdt->id_shop > -1 ? 'update' : 'insert'; ?>" method="post">
-    <input type="hidden" name="id_product" value="<?php echo $prdt->__GET('id_product'); ?>" />
-    <table style="width: 500px; background: #eee; padding: 4px;">
+    <table style="width: 1500px; background: #eee; padding: 15px;">
         <tr>
             <th style="text-align: left;">Name</th>
-            <td><input type="text" name="name" value="<?php echo $prdt->__GET('name'); ?>" style="width: 100%;" /></td>
-        </tr>
-        <tr>
             <th style="text-align: left;">Description</th>
-            <td><input type="text" name="description" value="<?php echo $prdt->__GET('description'); ?>" style="width: 100%;" /></td>
-        </tr>
-        <tr>
             <th style="text-align: left;">Category</th>
-            <td><input type="text" name="category" value="<?php echo $prdt->__GET('category'); ?>" style="width: 100%;" /></td>
-        </tr>
-        <tr>
             <th style="text-align: left;">Subcategory</th>
-            <td><input type="text" name="subcategory" value="<?php echo $prdt->__GET('subcategory'); ?>" style="width: 100%;" /></td>
-        </tr>
-        <tr>
             <th style="text-align: left;">Image</th>
-            <td><input type="text" name="image" value="<?php echo $prdt->__GET('image'); ?>" style="width: 100%;" /></td>
-        </tr>
-        <tr>
             <th style="text-align: left;">Active</th>
-            <td><input type="text" name="active" value="<?php echo $prdt->__GET('active'); ?>" style="width: 100%;" /></td>
+            <th></th>
         </tr>
-        <tr>
-            <td colspan="2">
-                <button type="submit">Save</button>
-            </td>
-        </tr>
-    </table>
-</form>
-<br />
+        <?php foreach ($productModel->ListAll() as $r): ?>
+            <tr>
+                <td><?php echo $r->__GET('name'); ?></td>
+                <td><?php echo $r->__GET('description'); ?></td>
+                <td><?php echo $r->__GET('category'); ?></td>
+                <td><?php echo $r->__GET('subcategory'); ?></td>
+                <td><?php echo $r->__GET('image'); ?></td>
+                <td><?php echo $r->__GET('active'); ?></td>
+                <td>
 
-<table style="width: 500px; background: #eee; padding: 4px;">
-    <tr>
-        <th style="text-align: left;">Name</th>
-        <th style="text-align: left;">Description</th>
-        <th style="text-align: left;">Category</th>
-        <th style="text-align: left;">Subcategory</th>
-        <th style="text-align: left;">Image</th>
-        <th style="text-align: left;">Active</th>
-        <th></th>
-    </tr>
-    <?php foreach ($productModel->ListAll() as $r): ?>
-        <tr>
-            <td><?php echo $r->__GET('name'); ?></td>
-            <td><?php echo $r->__GET('description'); ?></td>
-            <td><?php echo $r->__GET('category'); ?></td>
-            <td><?php echo $r->__GET('subcategory'); ?></td>
-            <td><?php echo $r->__GET('image'); ?></td>
-            <td><?php echo $r->__GET('active'); ?></td>
-            <td>
-                <a href="?action=edit&id_product=<?php echo $r->id_product; ?>">E</a>
-                <a href="?action=delete&id_product=<?php echo $r->id_product; ?>">X</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+                    <a href="?action=edit&id_product=<?php echo $r->id_product; ?>">E</a>
+                    <a href="?action=delete&id_product=<?php echo $r->id_product; ?>">X</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
