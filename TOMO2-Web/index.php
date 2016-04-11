@@ -1,8 +1,11 @@
 <?php session_start();
 
 //include_once ('includes/connection.php');
-//include_once ('includes/product.php');
+include_once ('includes/Answer.php');
+include_once ('includes/product.php');
+include_once ('includes/productModel.php');
 
+header('Content-Type: text/html; charset=utf-8');
 //$product = new Product;
 //$products = $product->fetch_all();
 
@@ -14,6 +17,7 @@ $uid = $_SESSION['id'];
 
 //create the url
 $profile_pic = "http://graph.facebook.com/" . $uid . "/picture?width=35&height=35";
+
 ?>
 
 <!DOCTYPE html>
@@ -192,15 +196,6 @@ $profile_pic = "http://graph.facebook.com/" . $uid . "/picture?width=35&height=3
 </div>
 
 <!--Our shops-->
-<?php
-//$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
-$sql = "SELECT * FROM Tiendas";
-$result = mysqli_query($conn, $sql);
-$numRows = mysqli_num_rows($result);
-
-if (mysqli_num_rows($result) > 0) {
-// output data of each row
-?>
 
     <div id="ourShops" class="parallax-container valign-wrapper">
         <div class="section no-pad-bot">
@@ -224,8 +219,27 @@ if (mysqli_num_rows($result) > 0) {
 <br>
 
 <?php
+//$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
+$sql = "SELECT * FROM Tiendas";
+$result = mysqli_query($conn, $sql);
+$numRows = mysqli_num_rows($result);
+
+if (isset($_SESSION['name'])) {
+
+    if ($_SESSION['id'] == '10207674962976867') {
+        echo "<a href='admin/modifyShop.php' class='btn-floating btn-move-up waves-effect waves-light red darken-2'>
+                    <i class='mdi-content-add'></i>
+                </a>";
+    }
+}
+
+if (mysqli_num_rows($result) > 0) {
+// output data of each row
+
 while ($row = mysqli_fetch_assoc($result)) {
+
     ?>
+
     <!--echo "id: " . $row["id_shop"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Tel. num: " . $row["tel_number"]. "<br>";-->
     <div class="slider">
         <ul class="slides">
@@ -257,7 +271,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php if (!empty($row["iframe"])) { ?>
 
         <div class="google-maps">
-            <iframe src=<?php echo $row["iframe"]; ?></iframe>
+            <iframe src=<?php echo $row["iframe"]; ?>></iframe>
 
         </div>
         <br>
@@ -265,132 +279,31 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <?php
     }
+    echo "<br />";
+
+    if (isset($_SESSION['name'])) {
+
+        if ($_SESSION['id'] == '10207674962976867') { ?>
+            <a href="admin/modifyShop.php?action=edit&id_shop=<?php echo $row['id_shop'];?>" class="btn-floating btn-move-up waves-effect waves-light  red darken-2 right" style="margin-top: -45px;">
+                <i class="mdi-editor-mode-edit activator"></i>
+            </a>
+
+            <a href="admin/statusShop.php?active=<?php echo $row['active'];?>&id_shop=<?php echo $row['id_shop'];?>" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 80px">
+                <i class="mdi-action-done"></i>
+            </a>
+
+            <a href="admin/deleteShop.php" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 40px">
+                <i class="mdi-action-delete"></i>
+            </a>
+            <?php
+        }
+    }
+
+    echo "<br />";
+    echo "<br />";
+
 }
-?>
-<!--
-<div class="slider">
-  <ul class="slides">
-    <li> <img src="img/Vic1.jpg" alt="Vic1[punto]jpg">
-      <div class="caption center-align">
-        <h3></h3>
-        <h5 class="light grey-text text-lighten-3">Carrer de Vic, 2, Gracia, 08006 Barcelona. 932 173 192</h5>
-      </div>
-    </li>
-    <li> <img src="img/Vic2.jpg" alt="Vic2[punto]jpg">
-      <div class="caption left-align">
-        <h3>Carrer de Vic, 2, Gracia, 08006 Barcelona. 932 173 192</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Vic3.jpg" alt="Vic3[punto]jpg">
-      <div class="caption right-align">
-        <h3>Carrer de Vic, 2, Gracia, 08006 Barcelona. 932 173 192</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-  </ul>
-</div>
-<!--<p class="center-align grey-text light">Carrer de Vic, 2, Gracia, 08006 Barcelona. 932 173 192 </p>
-       <br>
-<div class="google-maps">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2992.8717633098972!2d2.1555656999999986!3d41.39859119999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4a29781519389%3A0x63feb527343ec099!2sTomo+II+-+Helados+naturales!5e0!3m2!1ses!2ses!4v1440936419080" width="400" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
-</div>
-<br>
-<br>
 
-<!--<img class="materialboxed" width="100%" data-caption="Tienda de la calle Argentería 61" src="img/Argenteria1.jpg">-->
-<!--
-<div class="slider">
-  <ul class="slides">
-    <li> <img src="img/Borne1.jpg" alt="img/Borne1[punto]jpg">
-      <div class="caption center-align">
-        <h3>Carrer de l'Argenteria 61, Barrio Gótico, 08003 Barcelona. 933 197 739</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Borne2.jpg" alt="img/Borne2[punto]jpg">
-      <div class="caption left-align">
-        <h3>Carrer de l'Argenteria 61, Barrio Gótico, 08003 Barcelona. 933 197 739</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Borne3.jpg" alt="img/Borne3[punto]jpg">
-      <div class="caption right-align">
-        <h3>Carrer de l'Argenteria 61, Barrio Gótico, 08003 Barcelona. 933 197 739</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-  </ul>
-</div>
-<!--<p class="center-align grey-text light">Carrer de l'Argenteria 61, Barrio Gótico, 08003 Barcelona. 933 197 739 </p>
-      <br>
-<div class="google-maps">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.5621634874515!2d2.1810929999999993!3d41.383596399999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4a2fee44d02b5%3A0xc44e9e85d34eadda!2sTomo+II+-+Helados+naturales!5e0!3m2!1ses!2ses!4v1440937520369" width="400" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
-</div>
-<br>
-<br>
-<div class="slider">
-  <ul class="slides">
-    <li> <img src="img/Galvany1.jpg" alt="Galvany1[punto]jpg">
-      <div class="caption center-align">
-        <h3>Marià Cubí, 156, (esquina Santaló), Sant Gervasi - Sarrià, 08021 Barcelona. 932 528 973</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Galvany2.jpg" alt="Galvany2[punto]jpg">
-      <div class="caption left-align">
-        <h3>Marià Cubí, 156, (esquina Santaló), Sant Gervasi - Sarrià, 08021 Barcelona. 932 528 973</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Galvany3.jpg" alt="Galvany3[punto]jpg">
-      <div class="caption right-align">
-        <h3>Marià Cubí, 156, (esquina Santaló), Sant Gervasi - Sarrià, 08021 Barcelona. 932 528 973</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-  </ul>
-</div>
-<!--<p class="center-align grey-text light">Marià Cubí, 156, (esquina Santaló), Sant Gervasi - Sarrià, 08021 Barcelona. 932 528 973</p>
-    <br>
-<div class="google-maps">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.001456454466!2d2.1454212069511405!3d41.39577473448008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x4c79f744c10c71d5!2sHelader%C3%ADa+Tomo+II+Galvany!5e0!3m2!1ses!2ses!4v1440937821751" width="400" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
-</div>
-<br>
-<div class="slider">
-  <ul class="slides">
-    <li> <img src="img/MajorDeSarria4.jpg" alt="MajorDeSarria4[punto]jpg">
-      <div class="caption center-align">
-        <h3>Tienda de la calle Major de Sarrià, 75, Sarrià, Barcelona. 932 804 298</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/Sarria2.jpg" alt="Sarria2[punto]jpg">
-      <div class="caption left-align">
-        <h3>Tienda de la calle Major de Sarrià, 75, Sarrià, Barcelona. 932 804 298</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-    <li> <img src="img/MajorDeSarria5.png" alt="MajorDeSarria5[punto]png">
-      <div class="caption right-align">
-        <h3>Tienda de la calle Major de Sarrià, 75, Sarrià, Barcelona. 932 804 298</h3>
-        <h5 class="light grey-text text-lighten-3"></h5>
-      </div>
-    </li>
-  </ul>
-</div>
-
-///ESTO SE TIENE QUE AÑADIR YA!! - BEGIN
-<div class="google-maps">
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.001456454466!2d2.1454212069511405!3d41.39577473448008!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x4c79f744c10c71d5!2sHelader%C3%ADa+Tomo+II+Galvany!5e0!3m2!1ses!2ses!4v1440937821751" width="400" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
-</div>
-///ESTO SE TIENE QUE AÑADIR YA!! - END
-
-<br>
-    <br>
-<br> -->
-
-<?php
 } else {
     echo "Error al consultar la tabla Tiendas de la bbdd";
 }
@@ -401,7 +314,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <div class="row">
     <div class="col s12 m6">
         <div class="card">
-            <div class="card-image"><img src="img/Card1.jpg" alt="Card1[punto]jpg"> <span class="card-title">Dolç de llet</span>
+            <div class="card-image"><img src="img/Card1.JPG" alt="Card1[punto]jpg"> <span class="card-title">Dolç de llet</span>
             </div>
             <div class="card-content">
                 <p>En la calle Josep Anseim Clavé, 29, Barrio Gótico de Barcelona, hallamos esta tienda tan peculiar,
@@ -495,7 +408,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 <div class="row">
     <div class="col s12 m6">
         <div class="card">
-            <div class="card-image"><img src="img/Palamos5.jpg" alt="img/Palamos5[punto]jpg"> <span class="card-title">Gelatería del passeig</span>
+            <div class="card-image"><img src="img/2OtrasHeladerias/Palamos/Palamos5.jpg" alt="img/2OtrasHeladerias/Palamos/Palamos5[punto]jpg"> <span class="card-title">Gelatería del passeig</span>
             </div>
             <div class="card-content">
                 <p>Alejandra y Carlos hicieron de esta esquinita un lugar idílico para tomar, relajadamente frente al
@@ -510,7 +423,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <!--Eighth card-->
     <div class="col s12 m6">
         <div class="card">
-            <div class="card-image"><img src="img/Far1.jpg" alt="img/Far1[punto]jpg"> <span class="card-title">Far de San Sebastián</span>
+            <div class="card-image"><img src="img/2OtrasHeladerias/Far/Far1.JPG" alt="img/Far1[punto]jpg"> <span class="card-title">Far de San Sebastián</span>
             </div>
             <div class="card-content">
                 <p>En este emblemático lugar, además de unas fantásticas vistas, podrás disfrutar de una exquisita
@@ -657,14 +570,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                 <div class="slider">
                     <ul class="slides">
-                        <li><img src="img/Alquiler17.jpg" alt="img/Alquiler17[punto]jpg">
+                        <li><img src="img/4Alquileres/Alquiler17.JPG" alt="img/Alquiler17[punto]jpg">
 
                             <div class="caption center-align">
                                 <h3></h3>
                                 <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
-                        <li><img src="img/Alquiler18.jpg" alt="img/Alquiler18[punto]jpg">
+                        <li><img src="img/4Alquileres/Alquiler18.JPG" alt="img/Alquiler18[punto]jpg">
 
                             <div class="caption center-align">
                                 <h3></h3>
@@ -685,14 +598,14 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
-                        <li><img src="img/Alquiler10.jpg" alt="img/Alquiler10[punto]jpg">
+                        <li><img src="img/4Alquileres/Alquiler10.JPG" alt="img/Alquiler10[punto]jpg">
 
                             <div class="caption right-align">
                                 <h3></h3>
                                 <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
-                        <li><img src="img/Alquiler14.jpg" alt="img/Alquiler14[punto]jpg">
+                        <li><img src="img/4Alquileres/Alquiler14.JPG" alt="img/Alquiler14[punto]jpg">
 
                             <div class="caption right-align">
                                 <h3></h3>
@@ -722,7 +635,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
                 <div class="card">
                     <div class="card-image waves-effect waves-block waves-light"><img class="activator"
-                                                                                      src="img/Alquiler16.jpg"
+                                                                                      src="img/4Alquileres/Alquiler16.jpg"
                                                                                       alt="img/Alquiler16[punto]jpg">
                     </div>
                     <div class="card-content"><span class="card-title activator grey-text text-darken-4">Carrito con fuente de chocolate<i
@@ -767,7 +680,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
-    <div class="parallax"><img src="img/Producto1.jpg" alt="Localización de la tienda de la calle Vic, Gracia"></div>
+    <div class="parallax"><img src="img/3Productos/Producto1.jpg" alt="Localización de la tienda de la calle Vic, Gracia"></div>
 </div>
 <div class="container"> <!--Aqui tendría que ir una imagen con fondo otoñal-->
 <div class="section">
@@ -779,80 +692,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <div class="row">
 
-            <!--<div class="input-field col s4">
-                <div class="select-wrapper">
-                    <ul>
-                        <li class="optgroup">
-                            <span>Helados</span>
-                        </li>
-                        <li class>
-                            <span>Crema</span>
-                        </li>
-                        <li class>
-                            <span>Sorbete</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Repostería</span>
-                        </li>
-                        <li class>
-                            <span>Galleta</span>
-                        </li>
-                        <li class>
-                            <span>Tartas</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Otros</span>
-                        </li>
-                        <li class>
-                            <span>Otros</span>
-                        </li>
-                        <li class="optgroup">
-                            <span>Bebidas</span>
-                        </li>
-                        <li class>
-                            <span>Bebidas</span>
-                        </li>
-                    </ul>
-                    <select>
-                        <optgroup label="Helados">
-                            <option value="1" selected>Crema</option>
-                            <option value="2">Sorbete</option>
-                        </optgroup>
-                        <optgroup label="Repostería">
-                            <option value="3">Galleta</option>
-                            <option value="4">Tartas</option>
-                        </optgroup>
-                        <optgroup label="Otros">
-                            <option value="5">Otros</option>
-                        </optgroup>
-                        <optgroup label="Bebidas">
-                            <option value="6">Bebidas</option>
-                        </optgroup>
-                    </select>-->
-                    <!--<select>
-                        <!--<optgroup label="Helados">-->
-                    <!--<option value="" disabled selected>Choose a category</option> -->
-                    <!--<option value="1" selected>Crema</option>
-                    <option value="2">Sorbete</option>
-                    <!--</optgroup>
-                    <optgroup label="Repostería">-->
-                    <!--<option value="3">Galleta</option>
-                    <option value="4">Tartas</option>
-                    <!--</optgroup>
-                    <optgroup label="Otros">-->
-                    <!--<option value="5">Otros</option>
-                    <!--</optgroup>
-                    <optgroup label="Bebidas">-->
-                    <!--<option value="6">Bebidas</option>
-                    <!--</optgroup>-->
-                    <!--</select>-->
-                </div>
-            </div>
-
-            <div class="col s8">
+            <div class="col s12">
                 <form method="get" action="#productos" enctype="multipart/form-data">
                     <div class="input-field">
-                        <input id="search" name="search_product" type="search" placeholder="Busca por productos...">
+                        <input id="search" name="search_product" type="search" value="<?echo $_GET['search_product']?>" placeholder="Crema, Sorbete, Crepe, Bebidas, avellana, stracciatella...">
                         <label for="search"><i class="material-icons">search</i></label>
                         <!--<i class="material-icons red-text">close</i>-->
                     </div>
@@ -867,7 +710,16 @@ while ($row = mysqli_fetch_assoc($result)) {
         <?php
 
         //$sql = "SELECT * FROM Productos WHERE subcategory = 'Crema'";
-        $sql = "SELECT * FROM Productos";
+        if (isset($_SESSION['name'])) {
+
+            if ($_SESSION['id'] == '10207674962976867') {
+                $sql = "SELECT * FROM Productos";
+            } else {
+                $sql = "SELECT * FROM Productos WHERE active = 1";
+            }
+        } else {
+            $sql = "SELECT * FROM Productos WHERE active = 1";
+        }
         $result = mysqli_query($conn, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -875,7 +727,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         ////Prueba Search_product
         if (isset($_GET['search_product'])){
         $get_query = $_GET ['search_product'];
-        $get_post = "SELECT * FROM Productos WHERE subcategory LIKE '%$get_query%' OR name LIKE '%$get_query%' OR description LIKE '%$get_query%' OR category LIKE '%$get_query%'";
+        $get_post = "SELECT * FROM Productos WHERE subcategory LIKE '%$get_query%' OR name LIKE '%$get_query%' OR description LIKE '%$get_query%' OR category LIKE '%$get_query%' AND active = 1";
 
         $run_posts = mysqli_query($conn, $get_post);
 
@@ -889,8 +741,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="col s6 m6 l6">
                 <div class="card">
                     <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="442px"
-                                                 alt="<?php echo $row["image"]; ?>"><span
-                            class="card-title"><?php echo $row["name"]; ?></span></div>
+                                                 alt="<?php echo $row["image"]; ?>">
+                        <span class="card-title"><?php echo $row["name"]; ?></span>
+                    </div>
                     <div class="card-content">
                         <p><?php echo $row["description"]; ?></p>
                     </div>
@@ -911,10 +764,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
             </div>
         </div>
+        <!--</form>-->
         <?php
         } else {
         ?>
     </div>
+    <!--</form>-->
     <?php
     }
     //echo "id: " . $row["id_product"] . " - Name: " . $row["name"] . " - Description: " . $row["description"] . " - Category: " . $row["category"] . " - Subcategory: " . $row["subcategory"] . "<br>";
@@ -923,35 +778,213 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo "No se han encontrado coincidencias con la búsqueda, pruebe otra vez..";
     }
     } else {
-    //End if Search_Product... falta else
+    //End if Search_Product...
 
+    if (isset($_SESSION['name'])) {
+
+        if ($_SESSION['id'] == '10207674962976867') {
+            echo "<a href='admin/add.php' class='btn-floating btn-move-up waves-effect waves-light red darken-2'>
+                    <i class='mdi-content-add'></i>
+                  </a>";
+        }
+    }
     // output data of each row
     while ($row = mysqli_fetch_assoc($result)) {
 
     ?>
     <div class="row">
         <div class="col s6 m6 l6">
+
             <div class="card">
-                <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="442px"
+                <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="390px"
                                              alt="<?php echo $row["image"]; ?>"><span
                         class="card-title"><?php echo $row["name"]; ?></span></div>
                 <div class="card-content">
+                    <?php if (isset($_SESSION['name'])) {
+
+                        if ($_SESSION['id'] == '10207674962976867') { ?>
+                            <a class="btn-floating btn-move-up waves-effect waves-light  red darken-2 right" style="margin-top: -45px;">
+                                <i class="mdi-editor-mode-edit activator"></i>
+                            </a>
+
+                            <a href="testeo/testeo.php?active=<?php echo $row['active'];?>&id_product=<?php echo $row['id_product'];?>" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 80px">
+                                <i class="mdi-action-done"></i>
+                            </a>
+
+                            <a href="admin/delete.php?id_product=<?php echo $row['id_product'];?>" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 40px">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                            <?php
+                        }
+                    } ?>
+
                     <p><?php echo $row["description"]; ?></p>
                 </div>
+                <div class="card-reveal">
+                    <span class="card-title red-text text-darken-4"><?php echo $row["name"]; ?></span>
+                    <?php
+                    //$producto = New Product();
+                    $productModel = New ProductModel();
+                    $producto = $productModel->Obtain($_REQUEST['id_product']);
+
+                    ?>
+                    <form action="?action=<?php echo $producto->id_product; ?>" method="post">
+                        <input type="hidden" name="id_product" value="<?php echo $producto->__GET('id_product'); ?>"/>
+                        <table class="responsive-table">
+                            <tr>
+                                <th style="text-align: left;">Name</th>
+                                <td><input rel="<?php echo $row['id_product']; ?>" type="text" name="name" class="title-text" value="<?php echo $row["name"]; ?>" style="width: 100%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Description</th>
+                                <td><input type="text" name="description" class="description-text" value="<?php echo $row["description"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Category</th>
+                                <td><input type="text" name="category" class="category-text" value="<?php echo $row["category"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Subcategory</th>
+                                <td><input type="text" name="subcategory" class="subcategory-text" value="<?php echo $row["subcategory"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Image</th>
+                                <td><input type="text" name="image" class="image-text" value="<?php echo $row["image"]; ?>" style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Active</th>
+                                <td><input type="text" name="active" class="active-text" value="<?php echo $row["active"]; ?>"
+                                           style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button onclick="saveFunction()" class="waves-effect waves-light btn-large red lighten-1 update" type="button">Guardar</button>
+                                </td>
+                                <td colspan="2">
+                                    <button onclick="cancelFunction()" class="waves-effect waves-light btn-large red lighten-1" type="button">Cancelar</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                </div>
             </div>
-        </div>
+
         <?php
         if ($row = mysqli_fetch_assoc($result)){
         ?>
 
         <div class="col s6 m6 l6">
             <div class="card">
-                <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="442px"
+                <div class="card-image"><img src="<?php echo $row["image"]; ?>" height="331px" width="390px"
                                              alt="<?php echo $row["image"]; ?>"><span
                         class="card-title"><?php echo $row["name"]; ?></span></div>
                 <div class="card-content">
+                    <!--<div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
+                        <a class="btn-floating btn-large red">
+                            <i class="large material-icons">mode_edit</i>
+                        </a>
+                        <ul>
+                            <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+                            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+                            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+                            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+                        </ul>
+                    </div>-->
+
+                    <?php if (isset($_SESSION['name'])) {
+
+                        if ($_SESSION['id'] == '10207674962976867') { ?>
+                            <a class="btn-floating btn-move-up waves-effect waves-light  red darken-2 right" style="margin-top: -45px;">
+                                <i class="mdi-editor-mode-edit activator"></i>
+                            </a>
+
+                            <a href="testeo/testeo.php?active=<?php echo $row['active'];?>&id_product=<?php echo $row['id_product'];?>" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 80px">
+                                <i class="mdi-action-done"></i>
+                            </a>
+
+                            <a href="admin/delete.php?id_product=<?php echo $row['id_product'];?>" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 40px">
+                                <i class="mdi-action-delete"></i>
+                            </a>
+                            <?php
+                        }
+                    } ?>
+
                     <p><?php echo $row["description"]; ?></p>
                 </div>
+                <div class="card-reveal">
+                    <span class="card-title red-text text-darken-4"><?php echo $row["name"]; ?></span>
+                    <?php
+                        //$producto = New Product();
+                        $productModel = New ProductModel();
+                        $producto = $productModel->Obtain($_REQUEST['id_product']);
+
+                    ?>
+                    <form action="?action=<?php $productoID = $producto->id_product; echo $productoID; ?>" rel="<?php echo $row['id_product']; ?>" method="post">
+                        <input  type="hidden" name="id_product" value="<?php echo $producto->__GET('id_product'); ?>"/>
+                        <table class="responsive-table">
+                            <tr>
+                                <th style="text-align: left;">Nombre</th>
+                                <td><input id="nombreProducto" rel="<?php echo $row['id_product']; ?>" type="text" name="name" class="title-text" value="<?php echo $row["name"]; ?>" style="width: 100%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Descripción</th>
+                                <td><input type="text" name="description" class="description-text" value="<?php echo $row["description"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Categoría</th>
+                                <td><input type="text" name="category" class="category-text" value="<?php echo $row["category"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Subcategoría</th>
+                                <td><input type="text" name="subcategory" class="subcategory-text" value="<?php echo $row["subcategory"]; ?>"
+                                           style="width: 100%;"/></td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Imagen</th>
+                                <td><input type="text" name="image" class="image-text" value="<?php echo $row["image"]; ?>" style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;">Activo</th>
+                                <td><input type="text" name="active" class="active-text" value="<?php echo $row["active"]; ?>"
+                                           style="width: 100%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <button onclick="saveFunction()" class="waves-effect waves-light btn-large red lighten-1 update" type="button">Guardar</button>
+                                </td>
+                                <td colspan="2">
+                                    <button onclick="cancelFunction()" class="waves-effect waves-light btn-large red lighten-1" type="button">Cancelar</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+                <!--<div>
+                    <a href="testeo/testeo.php" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -95px; margin-right: 100px">
+                        <i class="mdi-action-done"></i>
+                    </a>
+                </div>-->
+
+                <!--<div>
+                    <a href="admin/delete.php" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -95px; margin-right: 60px">
+                        <i class="mdi-action-delete"></i>
+                    </a>
+                </div>-->
+
             </div>
         </div>
     </div>
@@ -969,129 +1002,6 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 ?>
-
-<!--   <ul class="collapsible popout" data-collapsible="accordion">
-     <li> <a class="collapsible-header">Cremas<i class="mdi-navigation-arrow-drop-down"></i></a>
-       <div class="collapsible-body">
-         <ul>
-           <li>Avellana</li>
-           <li>After Eight</li>
-           <li>Café</li>
-           <li>Chocolate amargo</li>
-           <li>Chocolate con leche</li>
-           <li>Nutella</li>
-           <li>Chocolate blanco</li>
-           <li>Coco</li>
-           <li>Crema catalana</li>
-           <li>Crema de fresas</li>
-           <li>Yogurt con coulis de frambuesa</li>
-           <li>Dulce de leche</li>
-           <li>Leche merengada</li>
-           <li>Mascarpone con frutas del bosque</li>
-           <li>Pistacho</li>
-           <li>Ferrero Rocher</li>
-           <li>Ron con pasas</li>
-           <li>Ratafía de L'Empordà</li>
-           <li>Oreo</li>
-           <li>Taro</li>
-           <li>Té verde</li>
-           <li>Sésamo negro</li>
-           <li>Strachiattella</li>
-           <li>Turrón</li>
-           <li>Tiramisú</li>
-           <li>Vainilla</li>
-           <li>Chocolate para diabéticos (por encargo)</li>
-           <li>vainilla para diabéticos (por encargo)</li>
-         </ul>
-       </div>
-     </li>
-     <li> <a class="collapsible-header">Sorbetes<i class="mdi-navigation-arrow-drop-down"></i></a>
-       <div class="collapsible-body">
-         <ul>
-           <li>Frambuesa</li>
-           <li>Fresa</li>
-           <li>Limón</li>
-           <li>Higos (estacional)</li>
-           <li>Sandía (estacional)</li>
-           <li>Piña</li>
-           <li>Mango</li>
-           <li>Maracuyá</li>
-           <li>Mandarina</li>
-           <li>Melón (estacional)</li>
-         </ul>
-       </div>
-     </li>
-   </ul>
-   <br>
-   <h5 class="red-text light">Y además...</h5>
-   <ul class="collapsible popout" data-collapsible="accordion">
-   <li> <a class="collapsible-header">Repostería<i class="mdi-navigation-arrow-drop-down"></i></a>
-       <div class="collapsible-body">
-         <ul>
-           <li>Brownie</li>
-           <li>Marquise de chocolate valrhona</li>
-           <li>Macarons</li>
-         </ul>
-       </div>
-     </li>
-     <li> <a class="collapsible-header">Bebidas<i class="mdi-navigation-arrow-drop-down"></i></a>
-       <div class="collapsible-body">
-         <ul>
-           <li>Licuados</li>
-           <li>Smoothies</li>
-           <li>Batidos</li>
-           <li>Chocolate caliente</li>
-         </ul>
-       </div>
-     </li>
-     <li> <a class="collapsible-header">También<i class="mdi-navigation-arrow-drop-down"></i></a>
-       <div class="collapsible-body">
-         <ul>
-           <li>Creppes</li>
-           <li>Gofres</li>
-         </ul>
-       </div>
-     </li>
-    </ul>
- </div>
- <div class="row">
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Cucuruchos sin gluten y helados para diabéticos" width="100%" src="img/26.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Tableta de Brownie" width="100%" src="img/37.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Brownie" width="100%" src="img/38.jpg">
- </div>
- </div>
- </div>
-
- <div class="row">
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Gofre con azucar glass" width="100%" src="img/35.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Macarons" width="100%" src="img/39.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Marquise de chocolate Valrhona" width="100%" src="img/Producto9.png">
- </div>
- </div>
- </div>
-
- <div class="row">
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Creppe" width="100%" src="img/Producto5.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Batido de fresa" width="100%" src="img/Producto10.jpg">
- </div>
- <div class="col s12 l4 center">
- <img class="materialboxed" data-caption="Batido de chocolate" width="100%" src="img/Producto1.jpg">
- </div>
- </div>
- </div> -->
 
 </div>
 </div>
@@ -1135,6 +1045,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <h5 class="red-text light">Esta parte de la web aún está en construcción</h5>
                     <br>
                     <?php if (isset($_SESSION['name'])) { /*var_dump ($_SESSION['datos']);*/
+                        ?>
+
+                        <input value="Salir de la sesión" type="button" onclick="location.href='logout.php'"/>
+
+                        <?php
+
                     } else {
                     } ?>
 
@@ -1147,6 +1063,187 @@ while ($row = mysqli_fetch_assoc($result)) {
 } ?>
 <!--EditProfile-->
 
+
+<!--Contest-->
+<?php if (isset($_SESSION['logged_in'])) { ?>
+    <div id="contest" class="parallax-container valign-wrapper">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <div class="row center">
+                    <h5 class="header col s12 red-text light"> <?php if (isset($_SESSION['logged_in'])) {
+                            echo "Apartado de Concursos";
+                        } ?></h5>
+                </div>
+            </div>
+        </div>
+        <div class="parallax"><img src="img/background10.png" alt="Localización de la tienda de la calle Vic, Gracia">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+
+            <div class="row">
+                <div class="col s12 center">
+                    <h3><i class=" mdi-action-dashboard brown-text"></i></h3>
+                    <h4>Concursos</h4>
+                    <h5 class="red-text light">La parte de concursos va aquí</h5>
+                    <br>
+                    <br>
+                    <br>
+                    <br> <?php //echo $productoIDE ?>
+                    <br>
+                    <?php if (isset($_SESSION['logged_in'])) { /*var_dump ($_SESSION['datos']);*/
+                    } else {
+
+                    } ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+} else { ?>
+    <div id="contest" class="parallax-container valign-wrapper">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <div class="row center">
+                    <h5 class="header col s12 red-text light"> <?php if (isset($_SESSION['logged_in'])) {
+                            echo "Apartado de Concursos";
+                        } ?></h5>
+                </div>
+            </div>
+        </div>
+        <div class="parallax"><img src="img/background10.png" alt="Localización de la tienda de la calle Vic, Gracia">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+
+            <div class="row">
+                <div class="col s12 center">
+                    <h3><i class=" mdi-action-dashboard brown-text"></i></h3>
+                    <h4>Concursos</h4>
+                    <h5 class="red-text light"><?php if (isset($_SESSION['name'])) {
+                            echo "¡Participa y gana miles de productos gratis!";
+                        } else { echo "¡Regístrate para poder concursar y ganar productos gratis!";} ?></h5>
+                    <br>
+                    <br>
+                    <br>
+                    <?php
+                    if (isset($_SESSION['name'])) {
+
+                        if ($_SESSION['id'] == '10207674962976867') {
+                            echo "<a href='admin/modifyContest.php' class='btn-floating btn-move-up waves-effect waves-light red darken-2'>
+                            <i class='mdi-content-add'></i>
+                            </a>";
+                        }
+                    }
+
+                    $sql = "SELECT * FROM Concursos";
+                    $result = mysqli_query($conn, $sql);
+
+                    if (mysqli_num_rows($result) > 0) {
+                    // output data of each row
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<div class='left-align'>";
+                            echo "<h2>" . $row['name'] . "</h2>";
+                            echo "<h4>" . $row['question'] . "</h4>";
+                            if ($row['active'] == 1){
+                                if ($row['initial_date'] > date("Y-m-d")){
+                                    echo "El concurso no ha empezado aún &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                } elseif ($row['final_date'] < date("Y-m-d")) {
+                                    echo "El concurso ha expirado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                } elseif (($row['initial_date'] <= date("Y-m-d")) and ($row['final_date'] > date("Y-m-d"))) {
+                                    echo "Concurso activo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                } elseif ($row['final_date'] = date("Y-m-d")){
+                                    echo "¡¡Último día para poder concursar!! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                                }
+                                //echo "Concurso activo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            } else {
+                                echo "Concurso inactivo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            }
+                            echo $row['initial_date'] . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                            echo $row['final_date'] . "<br /><br />";
+                            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ganador/es / Ganadora/as: " . $row['winner'] . "<br /><br />";
+
+                            $answer = new Answer();
+
+                            if (isset($_SESSION['name'])) {
+                                ?>
+                                <form action="#contest" method="post" name="fvalida">
+                                    <?php
+
+                                    $sql2 = "SELECT * FROM Respuestas WHERE id_event = " . $row["id_event"];
+                                    $result2 = mysqli_query($conn, $sql2);
+                                    if (mysqli_num_rows($result2) > 0) {
+
+                                        $counter = 1;
+                                        while ($row2 = mysqli_fetch_assoc($result2)) { ?>
+
+
+                                            <p>
+                                                <input name="group1" type="radio" id="<?php echo $counter; ?>"/>
+                                                <label
+                                                    for="<?php echo $counter; ?>"><?php echo $row2['respuesta']; ?></label>
+                                            </p>
+
+
+                                            <?php
+                                            $counter++;
+                                        }
+                                    }
+
+                                    ?>
+                                    <input type="button" value="Enviar respuesta" onclick="valida_envia()">
+                                </form>
+                                <?php
+                            }
+
+                            if (isset($_SESSION['name'])) {
+
+                                if ($_SESSION['id'] == '10207674962976867') { ?>
+                                    <div class="right-align">
+                                        <a href="admin/modifyContest.php?action=edit&id_event=<?php echo $row['id_event'];?>" class="btn-floating btn-move-up waves-effect waves-light  red darken-2 right" style="margin-top: -45px;">
+                                        <i class="mdi-editor-mode-edit activator"></i>
+                                        </a>
+
+                                        <a href="admin/statusContest.php?active=<?php echo $row['active'];?>&id_event=<?php echo $row['id_event'];?>" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 80px">
+                                            <i class="mdi-action-done"></i>
+                                        </a>
+
+                                        <a href="admin/deleteContest.php" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 40px">
+                                            <i class="mdi-action-delete"></i>
+                                        </a>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            echo "<br /><br /><br /><br />";
+                            echo "</div>";
+                        }
+                    }
+                    ?>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <?php if (isset($_SESSION['logged_in'])) { /*var_dump ($_SESSION['datos']);*/
+                    } else {
+
+                    } ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+<!--Contest-->
+
+
 <!--Contact us-->
 <div id="contactUs" class="parallax-container valign-wrapper">
     <div class="section no-pad-bot">
@@ -1156,7 +1253,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
-    <div class="parallax"><img src="img/contactUsImg.jpg" alt="Unsplashed background img 2"></div>
+    <div class="parallax"><img src="img/contactUsImg.JPG" alt="Unsplashed background img 2"></div>
 </div>
 <div class="container">
     <div class="section">
@@ -1185,7 +1282,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m12 l12">
-                        <input type="text" name="email" size="100" required> <!--id="email"-->
+                        <input type="email" name="email" size="100" required> <!--id="email"-->
                         <label for="email">E-mail</label>
                     </div>
                 </div>
@@ -1202,7 +1299,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </div>
                 </div>
                 <div class="row center">
-                    <button class="waves-effect waves-light btn-large red lighten-1 disabled" type="submit"
+                    <button class="waves-effect waves-light btn-large red lighten-1" type="submit"
                             name="Send" value="Send"><i class="material-icons right">send</i>Enviar
                     </button>
                 </div>
@@ -1236,25 +1333,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <br>
 
                 <div class="row">
-                    <div class="input-field col s4">
-                        <select multiple>
-                            <optgroup label="Fecha">
-                                <!--<option value="" disabled selected>Choose a category</option> -->
-                                <option value="1" selected>Más reciente</option>
-                                <option value="2">Más antigua</option>
-                            </optgroup>
-                            <optgroup label="Nombre">
-                                <option value="3">A-Z</option>
-                                <option value="4">Z-A</option>
-                            </optgroup>
-                        </select>
-                        <label>Buscador</label>
-                    </div>
 
-                    <div class="col s8">
+
+                    <div class="col s12">
                         <form method="get" action="#news" enctype="multipart/form-data">
                             <div class="input-field">
-                                <input id="search_new" name="search_new" type="search" placeholder="Busca por noticias...">
+                                <input id="search_new" name="search_new" type="search" value="<?echo $_GET['search_new']?>" placeholder="Busca por noticias...">
                                 <label for="search"><i class="material-icons">search</i></label>
                                 <!--<i class="material-icons red-text">close</i>-->
                             </div>
@@ -1262,6 +1346,15 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </div>
                 </div>
 
+                <?php
+                if (isset($_SESSION['name'])) {
+
+                if ($_SESSION['id'] == '10207674962976867') {
+                echo "<a href='admin/modifyNew.php' class='btn-floating btn-move-up waves-effect waves-light red darken-2'>
+                    <i class='mdi-content-add'></i>
+                </a>";
+                }
+                } ?>
 
                 <?php
                 //$sql = "SELECT * FROM Noticias WHERE id_noticia = '2'";
@@ -1273,7 +1366,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                     if (isset($_GET['search_new'])) {
                         $get_query = $_GET ['search_new'];
-                        $get_post = "SELECT * FROM Noticias WHERE name LIKE '%$get_query%' OR upload_date LIKE '%$get_query%' OR description LIKE '%$get_query%'";
+                        $get_post = "SELECT * FROM Noticias WHERE  name LIKE '%$get_query%' OR upload_date LIKE '%$get_query%' OR description LIKE '%$get_query%' AND active = 1";
 
                         $run_posts = mysqli_query($conn, $get_post);
 
@@ -1312,7 +1405,26 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <span style="float: left;"><?php echo $row["upload_date"]; ?></span>
 
                                 <div>
-                                    <p><?php echo $row["description"]; ?></p>
+                                    <p><?php echo $row["description"]; ?></p> <br /><br /><br />
+
+                                    <?php if (isset($_SESSION['name'])) {
+
+                                        if ($_SESSION['id'] == '10207674962976867') { ?>
+                                            <a href="admin/modifyNew.php?action=edit&id_news=<?php echo $row['id_news'];?>" class="btn-floating btn-move-up waves-effect waves-light  red darken-2 right" style="margin-top: -45px;">
+                                                <i class="mdi-editor-mode-edit activator"></i>
+                                            </a>
+
+                                            <a href="admin/statusNew.php?active=<?php echo $row['active'];?>&id_news=<?php echo $row['id_news'];?>" class="btn-floating btn-move-up waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 80px">
+                                                <i class="mdi-action-done"></i>
+                                            </a>
+
+                                            <a href="admin/deleteNew.php" class="btn-floating waves-effect waves-light red darken-2 right" style="margin-top: -45px; margin-right: 40px">
+                                                <i class="mdi-action-delete"></i>
+                                            </a>
+                                            <?php
+                                        }
+                                    } ?>
+
                                 </div>
                                 <br/>
 
@@ -1451,16 +1563,16 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <!--  Scripts -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>-->
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/scrollFire.js"></script>
 <!--<script src="js/search.js"></script>-->
 <script src="js/index.js"></script>
 <script src="js/init.js"></script>
-<script type="text/javascript" src="../Card-2/fbapp/fb.js"></script>
+<script type="text/javascript" src="fbapp/fb.js"></script>
 
-<!--Script para inicializar los menús desplegables, pero parece que no funciona-->
+<!--Script para inicializar los menús desplegables (dropdowns), pero parece que no funciona-->
 <!--<script type="text/javascript">
     $(document).ready(function() {
         $('#select').material_select();
@@ -1484,6 +1596,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     });
 </script>
 
+<!--Script de los campos vacios en los formularios donde sean requeridos-->
 <script>
     function isEmpty(str) {
         // Check whether string is empty.
@@ -1511,13 +1624,211 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 </script>
 
+<!--#Script del dropdown 'select' -> de productos.-->
 <script>
     $(document).ready(function() {
         $('select').material_select();
     });
 </script>
 
+<!--Script para saber si los checkbox de Productos han sido seleccionados o no y por tanto cambiar el estado de Active de la bbdd-->
+<script>
+    $("#check").on( 'change', function() {
+        if( $(this).is(':checked') ) {
+            // Hacer algo si el checkbox ha sido seleccionado
+            alert("El checkbox con valor " + $(this).val() + " ha sido seleccionado");
+        } else {
+            // Hacer algo si el checkbox ha sido deseleccionado
+            alert("El checkbox con valor " + $(this).val() + " ha sido deseleccionado");
+        }
+    });
+</script>
+
+<script>
+    function cancelFunction() {
+        window.location.reload();
+        //document.getElementById("field2").value = document.getElementById("field1").value;
+    }
+</script>
+
+<!--
+<script>
+    function saveFunction() {
+
+        //var variablejs = "<?php //echo $productoIDE; ?>" ;
+        var idProduct = $(this).attr('rel');
+        //document.write("VariableJS = " + variablejs);
+        window.location.href="admin/modifyProduct.php?action=edit&id_product=" + idProduct;
+    }
+</script>
+-->
+<?php
+/*
+$urlProduct = "admin/modifyProduct.php?action=edit&id_product=" . $productoID;
+
+
+echo '<script>';
+    echo 'function saveFunction() {';
+
+        echo 'ID: ' . $product->__GET('id_product') . '<br/>';
+        echo 'Nombre: ' . $product->__GET('name') . '<br>';
+        echo 'Descripcion: ' . $product->__GET('description') . '<br>';
+        echo 'Categoria: ' . $product->__GET('category') . '<br>';
+        echo 'Subcategoria: ' . $product->__GET('subcategory') . '<br>';
+        echo 'Activo: ' . $product->__GET('active') . '<br>';
+        //echo 'window.location.href="' . $urlProduct . '";';
+        //document.getElementById("field2").value = document.getElementById("field1").value;
+    echo '}';
+echo '</script>';
+*/
+?>
+
+<?php
+/******* Updating product *******/
+if (isset($_POST['updatethis'])) {
+
+    $idProduct = mysqli_real_escape_string($conn, $_POST['id_product']);
+    $nameProduct = mysqli_real_escape_string($conn, $_POST['name']);
+    $descriptionProduct = mysqli_real_escape_string($conn, $_POST['description']);
+    $categoryProduct = mysqli_real_escape_string($conn, $_POST['category']);
+    $subcategoryProduct = mysqli_real_escape_string($conn, $_POST['subcategory']);
+    $imageProduct = mysqli_real_escape_string($conn, $_POST['image']);
+    $activeProduct = mysqli_real_escape_string($conn, $_POST['active']);
+
+    $query = "UPDATE Productos SET name = '$nameProduct',
+                                   description = '$descriptionProduct',
+                                   category = '$categoryProduct',
+                                   subcategory = '$subcategoryProduct',
+                                   image = '$imageProduct',
+                                   active = '$activeProduct'
+                                   WHERE id_product = '$idProduct'";
+
+    $result_set = mysqli_query($conn, $query);
+
+    if (!$result_set){
+        die("Query FAIL" . mysqli_error($conn));
+    }
+}
+
+?>
+
+<script>
+
+    //$(document).ready(function()){ Linea 965 & 866
+
+
+        $(document).ready(function()
+        {
+            var idProduct;
+            var nameProduct;
+            var descriptionProduct;
+            var categoryProduct;
+            var subcategoryProduct;
+            var imageProduct;
+            var activeProduct;
+
+            var updatethis;
+
+
+            /*Extract id & name of the product*/
+
+            $(".title-text").on('input', function () {
+
+                idProduct = $(this).attr('rel');
+                nameProduct = $(this).val();
+
+                alert(nameProduct);
+
+            });
+
+            $(".description-text").on('input', function () {
+
+                descriptionProduct = $(this).val();
+
+                alert(descriptionProduct);
+
+            });
+
+            $(".category-text").on('input', function () {
+
+                categoryProduct = $(this).val();
+
+                alert(categoryProduct);
+
+            });
+
+            $(".subcategory-text").on('input', function () {
+
+                subcategoryProduct = $(this).val();
+
+                alert(subcategoryProduct);
+
+            });
+
+            $(".image-text").on('input', function () {
+
+                imageProduct = $(this).val();
+
+                alert(imageProduct);
+
+            });
+
+            $(".active-text").on('input', function () {
+
+                activeProduct = $(this).val();
+
+                alert(activeProduct);
+
+            });
+
+            /*Update Button Function*/
+            $(".update").on('click', function(){
+
+                $.post("#productos", {idProduct: idProduct, nameProduct: nameProduct, descriptionProduct: descriptionProduct, categoryProduct: categoryProduct, subcategoryProduct: subcategoryProduct, imageProduct: imageProduct, activeProduct: activeProduct, updatethis: updatethis}, function(data){
+
+                    alert("Se ha actualizado con lo siguiente: " + descriptionProduct);
+                })
+            });
+        });
+</script>
+
+<!--<script>-->
+<!--    function valida_envia(){-->
+<!---->
+<!--        //valido la edad. tiene que ser entero mayor que 18-->
+<!--        edad = document.fvalida.edad.value;-->
+<!--        edad = validarEntero(edad);-->
+<!--        document.fvalida.edad.value=edad;-->
+<!--        if (edad==""){-->
+<!--            alert("Tiene que introducir un número entero en su edad.");-->
+<!--            document.fvalida.edad.focus();-->
+<!--            return 0;-->
+<!--        }else{-->
+<!--            if (edad<18){-->
+<!--                alert("Debe ser mayor de 18 años.");-->
+<!--                document.fvalida.edad.focus();-->
+<!--                return 0;-->
+<!--            }-->
+<!--        }-->
+<!---->
+<!--        //valido el interés-->
+<!--        if (document.fvalida.interes.selectedIndex==0){-->
+<!--            alert("Debe seleccionar un motivo de su contacto.");-->
+<!--            document.fvalida.interes.focus();-->
+<!--            return 0;-->
+<!--        }-->
+<!---->
+<!--        //el formulario se envia-->
+<!--        alert("Muchas gracias por enviar el formulario");-->
+<!--        document.fvalida.submit();-->
+<!--    }-->
+<!--</script>-->
+
+
+
 </body>
+
+<!--Script del cargador de la página web-->
 <!--<script type="text/javascript">
     $(document).ready(function () {
         setTimeout(function(){
