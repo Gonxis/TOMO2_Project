@@ -4,12 +4,15 @@ session_start();
 
 include_once ('../includes/connection.php');
 
-if (isset($_SESSION['logged_in'])) {
-    ?>
+
+//if (isset($_SESSION['name']) and ($_SESSION['id'] == '10207674962976867')) {
+//if (isset($_SESSION['logged_in'])) {
+?>
 
     <html>
     <head>
         <title>index - editable Version</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     </head>
 
 <body>
@@ -18,18 +21,21 @@ if (isset($_SESSION['logged_in'])) {
 
     <br/>
 
-        <ol>
-            <li><a href="add.php">Add Product</a></li>
-            <li><a href="modify.php">Modify Product</a></li>
-            <li><a href="delete.php">Delete Product</a></li>
+        <!--<ol>
+            <li><a href="../PDO/ProductModel.php">Product</a></li>
+            <li><a href="../PDO/ShopModel.php">Shop</a></li>
+            <li><a href="../PDO/NewModel.php">News</a></li>
+            <li><a href="../PDO/ContestModel.php">Contest</a></li>
+            <li><a href="../PDO/AnswerModel.php">Answer</a></li>
             <li><a href="logout.php">Logout</a></li>
-        </ol>
+        </ol>-->
         </div>
         </body>
         </html>
 
     <?php
-    } else {
+    /*} else {
+
         if (isset($_POST['username'], $_POST['password'])) {
             $username = $_POST['username'];
             $password = $_POST['password'];
@@ -56,9 +62,9 @@ if (isset($_SESSION['logged_in'])) {
                     $error = 'Incorrect details!';
                 }
             }
-        }
-        ?>
-
+        }*/
+    ?>
+<!--
         <html>
         <head>
             <title>index - edited Version</title>
@@ -70,10 +76,10 @@ if (isset($_SESSION['logged_in'])) {
 
             <br/><br/>
 
-            <?php if (isset($error)) { ?>
-                <small style="color:#aa0000;"><?php echo $error; ?></small>
+            <?php //if (isset($error)) { ?>
+                <small style="color:#aa0000;"><?php //echo $error; ?></small>
                 <br/><br/>
-            <?php } ?>
+            <?php //} ?>
 
             <form action="index.php" method="post" autocomplete="off">
                 <input type="text" name="username" placeholder="username"/>
@@ -83,7 +89,15 @@ if (isset($_SESSION['logged_in'])) {
         </div>
         </body>
         </html>
-
-    <?php
-}
+-->
+<?php
+//}
+?>
+<?php
+/*} else {
+    echo "<script type=\"text/javascript\">
+           history.go(-1);
+       </script>";
+    exit;
+} */
 ?>

@@ -4,47 +4,71 @@ session_start();
 
 include_once ('../includes/connection.php');
 
-if (isset($_SESSION['logged_in'])) {
-    if (isset($_POST['name'], $_POST['description'], $_POST['category'], $_POST['subcategory'], $_POST['image'], $_POST['active'])){
-        $name = $_POST['name'];
-        $description = nl2br($_POST['description']);
-        $category = $_POST['category'];
-        $subcategory = $_POST['subcategory'];
-        $image = $_POST['image'];
-        $active = $_POST['active'];
+if (isset($_SESSION['name']) and ($_SESSION['id'] == '10207674962976867')) {
 
-        if (empty($name) or empty($description) or empty($category) or empty($subcategory)){
-            $error = 'There are some fields empty. The only empty field accepted is "image" field';
+    if (isset($_POST['guardar'])){
+
+        if (isset($_FILES['image'])){
+
+            $image['name'] = date('ymhis') . $_FILES['image']['name'];
+            $image['directory'] = '../img_bbdd/';
+            move_uploaded_file($_FILES['image']['tmp_name'], $image['directory'] . $image['name']);
+            $directory = 'img_bbdd/' . $image['name'];
         } else {
-            $query = $pdo->prepare('INSERT INTO Productos (name, description, category, subcategory, image, active) VALUES (?, ?, ?, ?, ?, ?)');
-
-            $query->bindValue (1, $name);
-            $query->bindValue (2, $description);
-            $query->bindValue (3, $category);
-            $query->bindValue (4, $subcategory);
-            $query->bindValue (5, $image);
-            $query->bindValue (6, $active);
-
-            $query->execute();
-
-            header('Location: index.php');
+            $image = 'img_bbdd/helados.jpg'; $directory = 'img_bbdd/helados.jpg';
         }
+
     }
 
-    ?>
+    if (isset($_POST['name'], $_POST['description'], $_POST['category'], $_POST['subcategory'], $_POST['image'], $_POST['active'])){
+    $name = $_POST['name'];
+    $description = nl2br($_POST['description']);
+    $category = $_POST['category'];
+    $subcategory = $_POST['subcategory'];
+    $image = $directory;
+    $active = $_POST['active'];
+
+
+    if (empty($name) or empty($description) or empty($category) or empty($subcategory)){
+        $error = 'Hay algunos campos vacíos por rellenar. El único campo vacío aceptable es "imagen".';
+    } else {
+
+        $query = $pdo->prepare('INSERT INTO Productos (name, description, category, subcategory, image, active) VALUES (?, ?, ?, ?, ?, ?)');
+
+        $query->bindValue (1, $name);
+        $query->bindValue (2, $description);
+        $query->bindValue (3, $category);
+        $query->bindValue (4, $subcategory);
+        $query->bindValue (5, $directory);
+        $query->bindValue (6, $active);
+
+        $query->execute();
+
+        echo "<script type=\"text/javascript\">
+            alert('Se ha añadido correctamente a la base de datos un nuevo producto');
+            history.go(-2);
+            </script>";
+        exit;
+    }
+}
+?>
 
     <html>
         <head>
-            <title>Add product - editable Version</title>
+            <title>Añadir Producto - Version editable</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <link href="../../Card-2/card-2.css" type="text/css" rel="stylesheet">
+            <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">-->
+            <link href="../css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
         </head>
 
         <body>
             <div class="container">
-                <a href="index.php" id="logo">CMS</a>
+                <!--<a href="index.php" id="logo">CMS</a>-->
 
                 <br />
 
-                <h4>Add Product</h4>
+                <h4>Añadir Producto</h4>
 
                 <?php
                 if (isset($error)) { ?>
@@ -55,22 +79,24 @@ if (isset($_SESSION['logged_in'])) {
                 ?>
 
                 <form action="add.php" method="post" autocomplete="off">
-                    <input type="text" name="name" placeholder="name">
-                    <input type="text" name="description" placeholder="description">
-                    <input type="text" name="category" placeholder="category">
-                    <input type="text" name="subcategory" placeholder="subcategory">
-                    <input type="text" name="image" placeholder="image directory">
-                    <input type="number" name="active" placeholder="0 = false; 1 = true">
-                    <input type="submit" value="Add product">
+                    <input type="text" name="name" placeholder="Nombre">
+                    <input type="text" name="description" placeholder="Descripción">
+                    <input type="text" name="category" placeholder="Categoría">
+                    <input type="text" name="subcategory" placeholder="Subcategoría">
+                    <input type="file" name="image" placeholder="Directorio de imagen">
+                    <input type="number" name="active" placeholder="0 = falso; 1 = verdad">
+                    <input type="submit" name="guardar" value="Añadir Producto">
                 </form>
 
             </div>
         </body>
     </html>
 
-    <?php
+<?php
 } else {
-    header('location: index.php');
+    echo "<script type=\"text/javascript\">
+           history.go(-1);
+       </script>";
+    exit;
 }
-
 ?>

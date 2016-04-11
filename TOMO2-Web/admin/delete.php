@@ -2,56 +2,68 @@
 
 session_start();
 
-include_once ('../includes/connection.php');
-include_once ('../includes/product.php');
+include_once ('../../TOMO2-Web/includes/connection.php');
+include_once ('../../TOMO2-Web/includes/product.php');
 
-$product = new News;
+$product = new Product();
 
-if (isset($_SESSION['logged_in'])) {
-    if (isset($_GET['id_product'])){
+if (isset($_SESSION['name']) and ($_SESSION['id'] == '10207674962976867')) {
+    if (isset($_GET['id_product'])) {
         $id_product = $_GET['id_product'];
 
+        //echo "<script type=\"text/javascript\">
+        //   alert('Se ha borrado correctamente el producto');
+           //history.go(-2);
+        //</script>";
+        //exit;
+
         $query = $pdo->prepare('DELETE FROM Productos WHERE id_product = ?');
-        $query = bindValue(1, $id_product);
+        $query->bindValue(1, $id_product);
 
         $query->execute();
 
-        header('Location: delete.php');
+        echo "<script type=\"text/javascript\">
+           alert('Se ha borrado correctamente el producto');
+           history.go(-2);
+       </script>";
+        exit;
     }
 
     $products = $product->fetch_all();
     ?>
 
     <html>
-        <head>
-            <title>index - editable Version</title>
-        </head>
+    <head>
+        <title>Eliminar Producto - Version editable</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    </head>
 
-        <body>
-            <div class="container">
-                <a href="index.php" id="logo">CMS</a>
+    <body>
+    <div class="container">
+        <!--<a href="index.php" id="logo">CMS</a>-->
 
-                <br />
+        <br/>
 
-                <h4>Select a product to Delete</h4>
+        <h4>Selecciona un producto para borrar</h4>
 
-                <form action="delete.php" method="get">
-                    <select onchange="this.form.submit();" name="id_product">
-                        <?php foreach ($products as $product) { ?>
-                            <option value="<?php echo $product['id_product']; ?>">
-                                <?php echo $product['name']; ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </form>
-            </div>
-        </body>
+        <form action="delete.php" method="get">
+            <select onchange="this.form.submit();" name="id_product">
+                <?php foreach ($products as $product) { ?>
+                    <option value="<?php echo $product['id_product']; ?>">
+                        <?php echo $product['name']; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </form>
+    </div>
+    </body>
     </html>
 
-<?php
+    <?php
 } else {
-    header('Location: index.php');
-    exit();
+    echo "<script type=\"text/javascript\">
+           history.go(-1);
+       </script>";
+    exit;
 }
-
 ?>

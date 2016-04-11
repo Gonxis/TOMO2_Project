@@ -4,7 +4,7 @@ session_start();
 
 include_once ('../includes/connection.php');
 
-if (isset($_SESSION['logged_in'])) {
+if (isset($_SESSION['name']) and ($_SESSION['id'] == '10207674962976867')) {
     if (isset($_POST['name'], $_POST['description'], $_POST['category'], $_POST['subcategory'], $_POST['image'], $_POST['active'])){
         $name = $_POST['name'];
         $description = nl2br($_POST['description']);
@@ -36,6 +36,7 @@ if (isset($_SESSION['logged_in'])) {
     <html>
     <head>
         <title>Modify product - editable Version</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     </head>
 
     <body>
@@ -70,7 +71,12 @@ if (isset($_SESSION['logged_in'])) {
 
 <?php
 } else {
-    header('location: index.php');
+    echo "<script type=\"text/javascript\">
+           history.go(-1);
+       </script>";
+    exit;
 }
 
 ?>
+
+
